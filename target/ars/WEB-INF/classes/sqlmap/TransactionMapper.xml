@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ars.dao.TransactionMapper" >
+  <resultMap id="BaseResultMap" type="com.ars.entity.Transaction" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="flight_id" property="flightId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="datetime" property="datetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, flight_id, description, datetime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from transaction
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByFlightIdQueue" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from transaction
+    where description = 'queue' and flight_id = #{id,jdbcType=INTEGER}
+    order by datetime
+  </select>
+  <select id="selectByUserIdQueue" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from transaction
+    where description = 'queue' and user_id = #{id,jdbcType=INTEGER}
+    order by datetime
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from transaction
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ars.entity.Transaction" >
+    insert into transaction (id, user_id, flight_id, 
+      description, datetime)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{flightId,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{datetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ars.entity.Transaction" >
+    insert into transaction
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="flightId != null" >
+        flight_id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="datetime != null" >
+        datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="datetime != null" >
+        #{datetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ars.entity.Transaction" >
+    update transaction
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="flightId != null" >
+        flight_id = #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="datetime != null" >
+        datetime = #{datetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ars.entity.Transaction" >
+    update transaction
+    set user_id = #{userId,jdbcType=INTEGER},
+      flight_id = #{flightId,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      datetime = #{datetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

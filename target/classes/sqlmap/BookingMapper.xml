@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ars.dao.BookingMapper" >
+  <resultMap id="BaseResultMap" type="com.ars.entity.Booking" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="flight_id" property="flightId" jdbcType="INTEGER" />
+    <result column="datetime" property="datetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, flight_id, datetime
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from booking
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySearch" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from booking
+    where user_id = #{userId,jdbcType=INTEGER} and flight_id = #{flightId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from booking
+    where user_id = #{userId,jdbcType=INTEGER}
+    order by datetime
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from booking
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from booking
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ars.entity.Booking" >
+    insert into booking (id, user_id, flight_id, 
+      datetime)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{flightId,jdbcType=INTEGER},
+      #{datetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ars.entity.Booking" >
+    insert into booking
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="flightId != null" >
+        flight_id,
+      </if>
+      <if test="datetime != null" >
+        datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="flightId != null" >
+        #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="datetime != null" >
+        #{datetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ars.entity.Booking" >
+    update booking
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="flightId != null" >
+        flight_id = #{flightId,jdbcType=INTEGER},
+      </if>
+      <if test="datetime != null" >
+        datetime = #{datetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ars.entity.Booking" >
+    update booking
+    set user_id = #{userId,jdbcType=INTEGER},
+      flight_id = #{flightId,jdbcType=INTEGER},
+      datetime = #{datetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ars.dao.AirlineMapper" >
+  <resultMap id="BaseResultMap" type="com.ars.entity.Airline" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="airline_name" property="airlineName" jdbcType="VARCHAR" />
+    <result column="iata" property="iata" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, airline_name, iata
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from airline
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from airline
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ars.entity.Airline" >
+    insert into airline (id, airline_name, iata
+      )
+    values (#{id,jdbcType=INTEGER}, #{airlineName,jdbcType=VARCHAR}, #{iata,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ars.entity.Airline" >
+    insert into airline
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="airlineName != null" >
+        airline_name,
+      </if>
+      <if test="iata != null" >
+        iata,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="airlineName != null" >
+        #{airlineName,jdbcType=VARCHAR},
+      </if>
+      <if test="iata != null" >
+        #{iata,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ars.entity.Airline" >
+    update airline
+    <set >
+      <if test="airlineName != null" >
+        airline_name = #{airlineName,jdbcType=VARCHAR},
+      </if>
+      <if test="iata != null" >
+        iata = #{iata,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ars.entity.Airline" >
+    update airline
+    set airline_name = #{airlineName,jdbcType=VARCHAR},
+      iata = #{iata,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

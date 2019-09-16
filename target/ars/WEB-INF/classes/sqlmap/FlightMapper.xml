@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ars.dao.FlightMapper" >
+  <resultMap id="BaseResultMap" type="com.ars.entity.Flight" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="airline" property="airline" jdbcType="INTEGER" />
+    <result column="departure_airport" property="departureAirport" jdbcType="INTEGER" />
+    <result column="arrival_airport" property="arrivalAirport" jdbcType="INTEGER" />
+    <result column="departure_time" property="departureTime" jdbcType="TIMESTAMP" />
+    <result column="arrival_time" property="arrivalTime" jdbcType="TIMESTAMP" />
+    <result column="duration" property="duration" jdbcType="VARCHAR" />
+    <result column="duration_float" property="durationFloat" jdbcType="REAL" />
+    <result column="transit_airport" property="transitAirport" jdbcType="INTEGER" />
+    <result column="transit_number" property="transitNumber" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="INTEGER" />
+    <result column="ticket_class" property="ticketClass" jdbcType="VARCHAR" />
+    <result column="ticket_number" property="ticketNumber" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, airline, departure_airport, arrival_airport, departure_time, arrival_time, duration, 
+    duration_float, transit_airport, transit_number, price, ticket_class, ticket_number
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from flight
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySearch" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from flight
+    where departure_airport = #{departure} and arrival_airport = #{arrival} and cast(departure_time as date) like #{departure-time}
+  </select>
+  <select id="selectBySearchClass" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from flight
+    where departure_airport = #{departure} and arrival_airport = #{arrival} and cast(departure_time as date) like #{departure-time} and ticket_class = #{clazz}
+  </select>
+  <select id="selectBySearchOrderTime" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from flight
+    where departure_airport = #{departure} and arrival_airport = #{arrival} and cast(departure_time as date) like #{departure-time}
+    order by duration_float
+  </select>
+  <select id="selectBySearchOrderLowPrice" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from flight
+    where departure_airport = #{departure} and arrival_airport = #{arrival} and cast(departure_time as date) like #{departure-time}
+    ORDER BY price
+  </select>
+  <select id="selectBySearchOrderHighPrice" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from flight
+    where departure_airport = #{departure} and arrival_airport = #{arrival} and cast(departure_time as date) like #{departure-time}
+    order by price desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from flight
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ars.entity.Flight" >
+    insert into flight (id, airline, departure_airport, 
+      arrival_airport, departure_time, arrival_time, 
+      duration, duration_float, transit_airport, 
+      transit_number, price, ticket_class, 
+      ticket_number)
+    values (#{id,jdbcType=INTEGER}, #{airline,jdbcType=INTEGER}, #{departureAirport,jdbcType=INTEGER}, 
+      #{arrivalAirport,jdbcType=INTEGER}, #{departureTime,jdbcType=TIMESTAMP}, #{arrivalTime,jdbcType=TIMESTAMP}, 
+      #{duration,jdbcType=VARCHAR}, #{durationFloat,jdbcType=REAL}, #{transitAirport,jdbcType=INTEGER}, 
+      #{transitNumber,jdbcType=INTEGER}, #{price,jdbcType=INTEGER}, #{ticketClass,jdbcType=VARCHAR}, 
+      #{ticketNumber,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ars.entity.Flight" >
+    insert into flight
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="airline != null" >
+        airline,
+      </if>
+      <if test="departureAirport != null" >
+        departure_airport,
+      </if>
+      <if test="arrivalAirport != null" >
+        arrival_airport,
+      </if>
+      <if test="departureTime != null" >
+        departure_time,
+      </if>
+      <if test="arrivalTime != null" >
+        arrival_time,
+      </if>
+      <if test="duration != null" >
+        duration,
+      </if>
+      <if test="durationFloat != null" >
+        duration_float,
+      </if>
+      <if test="transitAirport != null" >
+        transit_airport,
+      </if>
+      <if test="transitNumber != null" >
+        transit_number,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="ticketClass != null" >
+        ticket_class,
+      </if>
+      <if test="ticketNumber != null" >
+        ticket_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="airline != null" >
+        #{airline,jdbcType=INTEGER},
+      </if>
+      <if test="departureAirport != null" >
+        #{departureAirport,jdbcType=INTEGER},
+      </if>
+      <if test="arrivalAirport != null" >
+        #{arrivalAirport,jdbcType=INTEGER},
+      </if>
+      <if test="departureTime != null" >
+        #{departureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrivalTime != null" >
+        #{arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duration != null" >
+        #{duration,jdbcType=VARCHAR},
+      </if>
+      <if test="durationFloat != null" >
+        #{durationFloat,jdbcType=REAL},
+      </if>
+      <if test="transitAirport != null" >
+        #{transitAirport,jdbcType=INTEGER},
+      </if>
+      <if test="transitNumber != null" >
+        #{transitNumber,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="ticketClass != null" >
+        #{ticketClass,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketNumber != null" >
+        #{ticketNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ars.entity.Flight" >
+    update flight
+    <set >
+      <if test="airline != null" >
+        airline = #{airline,jdbcType=INTEGER},
+      </if>
+      <if test="departureAirport != null" >
+        departure_airport = #{departureAirport,jdbcType=INTEGER},
+      </if>
+      <if test="arrivalAirport != null" >
+        arrival_airport = #{arrivalAirport,jdbcType=INTEGER},
+      </if>
+      <if test="departureTime != null" >
+        departure_time = #{departureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrivalTime != null" >
+        arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duration != null" >
+        duration = #{duration,jdbcType=VARCHAR},
+      </if>
+      <if test="durationFloat != null" >
+        duration_float = #{durationFloat,jdbcType=REAL},
+      </if>
+      <if test="transitAirport != null" >
+        transit_airport = #{transitAirport,jdbcType=INTEGER},
+      </if>
+      <if test="transitNumber != null" >
+        transit_number = #{transitNumber,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="ticketClass != null" >
+        ticket_class = #{ticketClass,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketNumber != null" >
+        ticket_number = #{ticketNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ars.entity.Flight" >
+    update flight
+    set airline = #{airline,jdbcType=INTEGER},
+      departure_airport = #{departureAirport,jdbcType=INTEGER},
+      arrival_airport = #{arrivalAirport,jdbcType=INTEGER},
+      departure_time = #{departureTime,jdbcType=TIMESTAMP},
+      arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
+      duration = #{duration,jdbcType=VARCHAR},
+      duration_float = #{durationFloat,jdbcType=REAL},
+      transit_airport = #{transitAirport,jdbcType=INTEGER},
+      transit_number = #{transitNumber,jdbcType=INTEGER},
+      price = #{price,jdbcType=INTEGER},
+      ticket_class = #{ticketClass,jdbcType=VARCHAR},
+      ticket_number = #{ticketNumber,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
